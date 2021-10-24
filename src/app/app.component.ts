@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { animationFrameScheduler, interval } from 'rxjs';
 
-const WINDOW_HEIGHT = window.innerWidth;
-const WINDOW_WIDTH = window.innerHeight;
+const WINDOW_HEIGHT = window.innerHeight;
+const WINDOW_WIDTH = window.innerWidth;
+const WINDOW_AREA = WINDOW_HEIGHT * WINDOW_WIDTH;
 
 @Component({
   selector: 'app-root',
@@ -15,24 +16,28 @@ export class AppComponent implements OnInit {
   drops: Drop[] = [];
 
   ngOnInit() {
-    this.drops = this.generateDropsArray(100, 20).concat(
-      this.generateDropsArray(200, 17, 8,  0.8, 0.8),
-      this.generateDropsArray(400, 13, 6, 0.6, 0.5),
-      this.generateDropsArray(800, 8,  4, 0.4, 0.3),
+
+    this.drops = this.generateDropsArray(5, 20).concat(
+        this.generateDropsArray(10, 17, 8,  0.8, 0.6),
+        this.generateDropsArray(20, 13, 6, 0.6, 0.4),
+        this.generateDropsArray(40, 8,  4, 0.4, 0.2),
     );
 
     interval(0, animationFrameScheduler).subscribe(_ => {
       this.drops.forEach(drop => {
           if(drop.positionTop < WINDOW_HEIGHT) {
-            drop.positionTop += 5 * drop.speed + (drop.positionTop * 0.005 );
+            drop.positionTop += 3 * drop.speed + (drop.positionTop * 0.01 );
           } else {
             drop.positionTop = 0;
+            drop.positionLeft = Math.random() * WINDOW_WIDTH;
           }
       });
     });
   }
 
-  private generateDropsArray(dropQuantity: number, dropSize: number, dropLayer?: number, dropOpacity?: number, speed?: number): Drop[] {
+  private generateDropsArray(dropQuantityBaseFromArea: number, dropSize: number, dropLayer?: number, dropOpacity?: number, speed?: number): Drop[] {
+    const dropQuantity = Math.floor(WINDOW_AREA * (dropQuantityBaseFromArea * 0.00001));
+
     return Array.from(Array(dropQuantity).keys()).map(_ => { return new Drop(this.DROP_IMAGE, dropSize, dropLayer, dropOpacity, speed)});
   }
 }

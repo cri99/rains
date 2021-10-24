@@ -1,15 +1,9 @@
-<div class = "container">
-
-
-    <div class="drop" *ngFor = "let drop of drops"
-      [style.opacity] = "drop.opacity"
-      [style.left.px] = "drop.positionLeft"
-      [style.top.px] = "drop.positionTop"
-      [style.font-size.px] = "drop.size"
-      [style.z-index]="drop.layer"
-    >
-      {{ drop.image }}
-    </div>
-  
-
+<div class="drop" *ngFor = "let drop of drops"
+  [style.opacity] = "drop.opacity"
+  [style.left.px] = "drop.positionLeft"
+  [style.top.px] = "drop.positionTop"
+  [style.font-size.px] = "drop.size"
+  [style.z-index]="drop.layer"
+>
+  {{ drop.image }}
 </div>
